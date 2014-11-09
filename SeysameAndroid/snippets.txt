@@ -1,0 +1,14 @@
+//						Map<String, Object> map =user.asMap();
+						//						Set<Entry<String, Object>> set =map.entrySet();
+						//						for (Entry<String, Object> entry : set) {
+						//
+						//							if(entry.getValue()!=null){
+						//
+						//								Log.d("KEY", entry.getKey());
+						//								Log.d("VALUE", entry.getValue().toString());
+						//
+						//								userProfile.put(entry.getKey(),  entry.getValue().toString());
+						//
+						//
+						//							}
+						//						}
