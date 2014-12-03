@@ -1,4 +1,4 @@
-package com.seysame.authentication;
+package com.seysame.view.authentication;
 
 import java.io.IOException;
 import java.sql.Array;
@@ -20,13 +20,15 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.TextureView.SurfaceTextureListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
-import com.parse.integratingfacebooktutorial.R;
+import com.seysame.parse.R;
 import com.seysame.parse.application.SeysameApplication;
+import com.seysame.view.activity.HomeActivity;
 
 public class LoginActivity extends Activity implements SurfaceTextureListener {
 
@@ -39,7 +41,7 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_login);
 		mp = new MediaPlayer();
 		textureView = (TextureView) findViewById(R.id.textureView);
 	    textureView.setSurfaceTextureListener(this);
@@ -56,8 +58,9 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 		// and it's linked to a Facebook account.
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		if ((currentUser != null) && ParseFacebookUtils.isLinked(currentUser)) {
-			// Go to the user info activity
-			showUserDetailsActivity();
+		
+			startHomeActivity();
+			
 		}
 	}
 
@@ -89,23 +92,44 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 			public void done(ParseUser user, ParseException err) {
 				LoginActivity.this.progressDialog.dismiss();
 				if (user == null) {
+					
 					Log.d(SeysameApplication.TAG, "Uh oh. The user cancelled the Facebook login.");
+					showMessageError();
 				} else if (user.isNew()) {
 					Log.d(SeysameApplication.TAG, "User signed up and logged in through Facebook!");
-					showUserDetailsActivity();
+					startAuthenticationActivity();
+					finish();
 				} else {
 					Log.d(SeysameApplication.TAG, "User logged in through Facebook!");
-					showUserDetailsActivity();
+					startAuthenticationActivity();
+					finish();
 				}
 			}
 		});
 	}
+	
+	private void showMessageError(){
+		
+		Toast.makeText(this, R.string.error_login, Toast.LENGTH_LONG).show();
+		
+	}
+	
 
-	private void showUserDetailsActivity() {
-		Intent intent = new Intent(this, UserDetailsActivity.class);
-		startActivity(intent);
-		mp.stop();
+	private void startAuthenticationActivity() {
+		Intent intent = new Intent(this, AuthenticationActivity.class);
     	mp.release();
+		startActivity(intent);
+		
+		
+	}
+	
+	private void startHomeActivity(){
+		
+		Intent intent = new Intent(this, HomeActivity.class);
+    	mp.release();
+		startActivity(intent);
+		
+		
 	}
 
 	@Override
@@ -114,7 +138,6 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 		 Surface surface = new Surface(surfaceTexture);
 
 		    try {
-		       // AssetFileDescriptor afd = getAssets().openFd(FILE_NAME);
 		    	Uri video = Uri.parse("android.resource://" + getPackageName() + "/"+ R.raw.video);
 		        mp = new MediaPlayer();
 		        mp.setDataSource(this,video);
@@ -151,8 +174,8 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 
 	@Override
 	public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return true;
 	}
 
 	@Override
@@ -160,13 +183,23 @@ public class LoginActivity extends Activity implements SurfaceTextureListener {
 		// TODO Auto-generated method stub
 		
 	}
+	
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+		
+		
+	}
+	
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 	    if (mp != null) {
-	    	mp.stop();
+	    	//mp.stop();
 	    	mp.release();
-	    	mp = null;
+	    	//mp = null;
 	    }
 	}
 }

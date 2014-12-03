@@ -1,15 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Facebook Profile</string>
+    <string name="app_name">Seysame</string>
     <string name="FACEBOOK_ID">1492450674350863</string>
     <string name="CLIENT_KEY">ntMHPPba2PLBFeNKLa1UEQyLCgZkGrLnatHJmCPv</string>
     <string name="APPLICATION_ID">66lgdQ2DLOkBLvHEbaZ56KMiqvF34n7jYiVSzlWN</string>
     <string name="action_settings">Settings</string>
-    <string name="login">Sign In</string>
-    <string name="logout">Log Out</string>
+    <string name="login">Log in </string>
+    <string name="logout">Log out</string>
     <string name="login_intro">Check out your Facebook profile by logging in with the button below!</string>
     <string name="gender">Gender</string>
     <string name="email">Email</string>
+    <string name="error_login">Couldn\'t log in</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_search">Card Search</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="search_card">Card name</string>
+    <string name="search_level_rank">Level/Rank</string>
+    <string name="search_attack">Attack</string>
+    <string name="search_defense">Defense</string>
+    <string name="search_attribute">Attribute</string>
+    <string name="search_icon">Icon</string>
+    <string name="search_monster_type">Monster Type</string>
+    <string name="search_race">Race</string>
+
+    <string-array name="drawer_array">
+        <item>Available Trades</item>
+        <item>Card Search</item>
+        <item>Card Collection</item>
+        <item>Card Shop</item>
+        <item>Trading Feed</item>
+        <item>Profile</item>
+        <item>Contact us</item>
+        <item>Share app</item>
+        <item>Log out</item>
+    </string-array>
+    <string-array name="attribute_array">
+        <item>Dark</item>
+        <item>Light</item>
+        <item>Earth</item>
+        <item>Water</item>
+        <item>Fire</item>
+        <item>Wind</item>
+        <item>Divine</item>
+    </string-array>
+    <string-array name="icon_array">
+        <item>Equip</item>
+        <item>Field</item>
+        <item>Quick-Play</item>
+        <item>Ritual</item>
+        <item>Continuous</item>
+        <item>Counter</item>
+        <item>Normal</item>
+    </string-array>
+    <string-array name="race_array">
+        <item>WARRIOR</item>
+        <item>SPELLCASTER</item>
+        <item>ZOMBIE</item>
+        <item>MACHINE</item>
+        <item>AQUA</item>
+        <item>PYRO</item>
+        <item>ROCK</item>
+        <item>WINGEDBEAST</item>
+        <item>PLANT</item>
+        <item>INSECT</item>
+        <item>THUNDER</item>
+        <item>DRAGON</item>
+        <item>BEAST</item>
+        <item>BEASTWARRIOR</item>
+        <item>DINOSAUR</item>
+        <item>FISH</item>
+        <item>SEASERPENT</item>
+        <item>REPTILE</item>
+        <item>PSYCHO</item>
+        <item>DIVINE</item>
+        <item>CREATORGOD</item>
+        <item>FAIRY</item>
+        <item>FIEND</item>
+        <item>PHANTOMDRAGON</item>
+    </string-array>
     
+    <string-array name="monster_type__array">
+        <item>NORMAL</item>
+        <item>EFFECT</item>
+        <item>FUSION</item>
+        <item>RITUAL</item>
+        <item>TRAPMONSTER</item>
+        <item>SPIRIT</item>
+        <item>UNION</item>
+        <item>WINGEDBEAST</item>
+        <item>GEMINI</item>
+        <item>TUNER</item>
+        <item>SYNCHRO</item>
+        <item>TOKEN</item>
+        <item>FLIP</item>
+        <item>TOON</item>
+        <item>XYZ</item>
+        <item>PENDULUM</item>
+    </string-array>
+
 </resources>

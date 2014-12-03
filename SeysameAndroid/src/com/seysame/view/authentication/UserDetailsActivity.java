@@ -1,8 +1,6 @@
-package com.seysame.authentication;
+package com.seysame.view.authentication;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,13 +19,16 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.ProfilePictureView;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
-
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
-
-import com.parse.integratingfacebooktutorial.R;
+import com.parse.SaveCallback;
 import com.seysame.model.UserProfile;
-
+import com.seysame.parse.R;
 import com.seysame.parse.application.SeysameApplication;
 
 public class UserDetailsActivity extends Activity {
@@ -42,7 +43,7 @@ public class UserDetailsActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.userdetails);
+		setContentView(R.layout.activity_userdetails);
 
 		userProfilePictureView = (ProfilePictureView) findViewById(R.id.userProfilePicture);
 		userNameView = (TextView) findViewById(R.id.userName);
@@ -85,110 +86,120 @@ public class UserDetailsActivity extends Activity {
 			@Override
 			public void onCompleted(GraphUser user, Response response) {
 				if (user != null) {
-					// Create a JSON object to hold the profile info
-					JSONObject userProfile = new JSONObject();
-					// Save the user profile info in a user property
+
 					ParseUser currentUser = ParseUser.getCurrentUser();
-			
-					UserProfile profile = new UserProfile();
-					
+
 					try {
-						// Populate the JSON object
-						userProfile.put("facebookId", user.getId());
-						userProfile.put("name", user.getName());
-						profile.setId(user.getId());
-						profile.setFullName(user.getName());
-						
+						currentUser.put("id", (String) user.getId());
+						currentUser.put("fullName",
+								(String) user.getName());
+
 						if (user.getProperty("first_name") != null) {
-							profile.setFirstName(((String) user.getProperty("first_name")));
+
+							currentUser.put("firstName", (String) user
+									.getProperty("first_name"));
 						}
 						if (user.getProperty("last_name") != null) {
-							profile.setLastName(((String) user.getProperty("last_name")));
+
+							currentUser.put("lastName", (String) user
+									.getProperty("last_name"));
 						}
-						
+
 						if (user.getProperty("gender") != null) {
-							userProfile.put("gender", (String) user.getProperty("gender"));
-							profile.setGender((String) user.getProperty("gender"));
+
+							currentUser.put("gender",
+									(String) user.getProperty("gender"));
 						}
 						if (user.getProperty("email") != null) {
-							userProfile.put("email", (String) user.getProperty("email"));
-							currentUser.put("email",(String) user.getProperty("email") );
-							profile.setEmail((String) user.getProperty("email"));
+
+							currentUser.put("email",
+									(String) user.getProperty("email"));
+
 						}
 
 						if (user.getProperty("birthday") != null) {
-							userProfile.put("birthday", (String) user.getProperty("birthday"));
-							profile.setBirthday((String) user.getProperty("birthday"));
+							currentUser.put("birthday", (String) user
+									.getProperty("birthday"));
+
 						}
 						if (user.getProperty("location") != null) {
-							JSONObject location =(JSONObject) user.getProperty("location");
-							String locationName =(String) location.get("name");
-							userProfile.put("location", locationName);
-							profile.setLocation(locationName);
+							JSONObject location = (JSONObject) user
+									.getProperty("location");
+							String locationName = (String) location
+									.get("name");
+
+							currentUser.put("location", locationName);
 						}
-						
-						currentUser.put("profile", userProfile);
-						currentUser.saveInBackground();
-						profile.put("user", currentUser);
-						profile.saveInBackground();
+						currentUser.saveInBackground(new SaveCallback() {
+
+							@Override
+							public void done(ParseException e) {
+								ParseUser currentUser = ParseUser.getCurrentUser();
+								ParseInstallation.getCurrentInstallation().put("user",currentUser);
+								ParseInstallation.getCurrentInstallation().saveInBackground();
+								ParsePush.subscribeInBackground("");
+								
+
+							}
+						});
+
+
 
 						// Show the user info
 						updateViewsWithProfileInfo();
 					} catch (JSONException e) {
-						Log.d(SeysameApplication.TAG, "Error parsing returned user data. " + e);
+						Log.d(SeysameApplication.TAG,
+								"Error parsing returned user data. "
+										+ e);
 					}
 
 				} else if (response.getError() != null) {
-					if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY) || 
-							(response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
-						Log.d(SeysameApplication.TAG, "The facebook session was invalidated." + response.getError());
+					if ((response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_RETRY)
+							|| (response.getError().getCategory() == FacebookRequestError.Category.AUTHENTICATION_REOPEN_SESSION)) {
+						Log.d(SeysameApplication.TAG,
+								"The facebook session was invalidated."
+										+ response.getError());
 						onLogoutButtonClicked();
 					} else {
-						Log.d(SeysameApplication.TAG, 
-								"Some other error: " + response.getError());
+						Log.d(SeysameApplication.TAG,
+								"Some other error: "
+										+ response.getError());
 					}
 				}
 			}
-		}
-				);
+		});
 		request.executeAsync();
 	}
 
 	private void updateViewsWithProfileInfo() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
-		if (currentUser.has("profile")) {
-			JSONObject userProfile = currentUser.getJSONObject("profile");
-			try {
-
-				if (userProfile.has("facebookId")) {
-					userProfilePictureView.setProfileId(userProfile.getString("facebookId"));
-				} else {
-					// Show the default, blank user profile picture
-					userProfilePictureView.setProfileId(null);
-				}
-
-				if (userProfile.has("name")) {
-					userNameView.setText(userProfile.getString("name"));
-				} else {
-					userNameView.setText("");
-				}
-
-				if (userProfile.has("gender")) {
-					userGenderView.setText(userProfile.getString("gender"));
-				} else {
-					userGenderView.setText("");
-				}
-
-				if (userProfile.has("email")) {
-					userEmailView.setText(userProfile.getString("email"));
-				} else {
-					userEmailView.setText("");
-				}
-
-			} catch (JSONException e) {
-				Log.d(SeysameApplication.TAG, "Error parsing saved user data.");
-			}
+		if (currentUser.has("id")) {
+			userProfilePictureView.setProfileId(currentUser.getString("id"));
+		} else {
+			// Show the default, blank user profile picture
+			userProfilePictureView.setProfileId(null);
 		}
+
+		if (currentUser.has("name")) {
+			userNameView.setText(currentUser.getString("fullName"));
+		} else {
+			userNameView.setText("");
+		}
+
+		if (currentUser.has("gender")) {
+			userGenderView.setText(currentUser.getString("gender"));
+		} else {
+			userGenderView.setText("");
+		}
+
+		if (currentUser.has("email")) {
+			userEmailView.setText(currentUser.getString("email"));
+		} else {
+			userEmailView.setText("");
+		}
+		
+		
+
 	}
 
 	private void onLogoutButtonClicked() {
@@ -201,7 +212,7 @@ public class UserDetailsActivity extends Activity {
 
 	private void startLoginActivity() {
 		Intent intent = new Intent(this, LoginActivity.class);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		// intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
