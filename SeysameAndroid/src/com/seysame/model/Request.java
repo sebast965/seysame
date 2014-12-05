@@ -2,11 +2,12 @@ package com.seysame.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 @ParseClassName("Request")
 public class Request extends ParseObject{
 
 	private CardCollection cardCollection;
-	private UserProfile user;
+	private ParseUser user;
 	private String state;
 	
 	public Request() {
@@ -16,7 +17,7 @@ public class Request extends ParseObject{
 	
 	
 
-	public Request(CardCollection cardCollection, UserProfile user, String state) {
+	public Request(CardCollection cardCollection, ParseUser user, String state) {
 		super();
 		this.cardCollection = cardCollection;
 		this.user = user;
@@ -39,12 +40,12 @@ public class Request extends ParseObject{
 		put("cardCollection", cardCollection);
 	}
 
-	public UserProfile getUser() {
-		this.user = (UserProfile) get("user");
+	public ParseUser getUser() {
+		this.user = (ParseUser) get("user");
 		return user;
 	}
 
-	public void setUser(UserProfile user) {
+	public void setUser(ParseUser user) {
 		this.user = user;
 		put("user", user);
 	}
