@@ -1,6 +1,10 @@
 package com.seysame.parse.application;
 
+import java.io.File;
+
 import android.app.Application;
+import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.parse.Parse;
@@ -9,6 +13,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.SaveCallback;
+import com.seysame.cache.ImageCache;
 import com.seysame.model.Attribute;
 import com.seysame.model.Card;
 import com.seysame.model.CardAttribute;
@@ -36,39 +41,70 @@ public class SeysameApplication extends Application {
 
 	public static final String TAG = "SeysameApplication";
 
+	public static final String FILE_DIRECTORY = "Seysame";
+	
+	public static final String FILE_EXTENSION = ".jpg";
+
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		final String APPLICATION_ID = getResources().getString(R.string.APPLICATION_ID);
 		final String CLIENT_KEY = getResources().getString(R.string.CLIENT_KEY);
-		classRegistration();
 
+		// Register Parse Classes
+		registerClasses();
+		// Initialize Parse 
 		Parse.initialize(this, APPLICATION_ID, CLIENT_KEY);
 
 		// Set your Facebook App Id in strings.xml
 		ParseFacebookUtils.initialize(getString(R.string.FACEBOOK_ID));
+
 		
-		//subcribeBroadcastChannel();
+		//create file directory
+		createFileDirectory();
+		
+
+		// Initialize Image Cache
+		ImageCache.getInstance();
+
+
+
 	}
 
-	public void subcribeBroadcastChannel(){
-		
-		ParsePush.subscribeInBackground("", new SaveCallback() {
 
-			@Override
-			public void done(ParseException e) {
-				 if (e != null) {
-				      Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
-				    } else {
-				    	
-				      Log.e("com.parse.push", "failed to subscribe for push" ,e);
-				    }
+	public static boolean createFileDirectory(){
 
-			}
-		});
+		String path = Environment.getExternalStorageDirectory().getPath()+File.separator+FILE_DIRECTORY;
+		File directory = new File(path);
+		return directory.mkdirs();
 	}
 
-	public void classRegistration(){
+
+
+
+
+
+
+
+
+	//	public void subcribeBroadcastChannel(){
+	//		
+	//		ParsePush.subscribeInBackground("", new SaveCallback() {
+	//
+	//			@Override
+	//			public void done(ParseException e) {
+	//				 if (e != null) {
+	//				      Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+	//				    } else {
+	//				    	
+	//				      Log.e("com.parse.push", "failed to subscribe for push" ,e);
+	//				    }
+	//
+	//			}
+	//		});
+	//	}
+
+	public void registerClasses(){
 		ParseObject.registerSubclass(Attribute.class);
 		ParseObject.registerSubclass(Card.class);
 		ParseObject.registerSubclass(CardAttribute.class);
