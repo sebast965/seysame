@@ -2,13 +2,14 @@ package com.seysame.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 @ParseClassName("UserCollection")
 public class UserCollection extends ParseObject {
 
 	
 	private Collection collection;
 	
-	private UserProfile user;
+	private ParseUser user;
 	
 	public UserCollection() {
 		
@@ -17,7 +18,7 @@ public class UserCollection extends ParseObject {
 	
 	
 
-	public UserCollection(Collection collection, UserProfile user) {
+	public UserCollection(Collection collection, ParseUser user) {
 		super();
 		this.collection = collection;
 		this.user = user;
@@ -39,12 +40,12 @@ public class UserCollection extends ParseObject {
 		put("collection",this.collection);
 	}
 
-	public UserProfile getUser() {
-		this.user = (UserProfile) get("user");
+	public ParseUser getUser() {
+		this.user = (ParseUser) get("user");
 		return user;
 	}
 
-	public void setUser(UserProfile user) {
+	public void setUser(ParseUser user) {
 		put("user",this.user);
 		this.user = user;
 	}

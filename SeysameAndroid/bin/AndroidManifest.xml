@@ -6,73 +6,93 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-   
+
     <permission
         android:name="com.seysame.parse.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-permission android:name="com.seysame.parse.permission.C2D_MESSAGE" />
-    
+
     <uses-sdk
         android:minSdkVersion="16"
         android:targetSdkVersion="21" />
 
     <application
+        android:name=".application.SeysameApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
-        android:name="com.seysame.parse.application.SeysameApplication" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.seysame.view.authentication.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:launchMode="singleTop" >
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.NoTitleBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity 
-            android:name="com.seysame.view.authentication.UserDetailsActivity" 
-            android:label="@string/app_name"/>
-        
-        <activity 
-            android:name="com.seysame.view.authentication.AuthenticationActivity" 
+        <activity
+            android:name="com.seysame.view.authentication.UserDetailsActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.seysame.view.authentication.AuthenticationActivity"
             android:label="@string/app_name"
             android:noHistory="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        
+            android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.seysame.view.activity.HomeActivity" 
-            android:label="@string/app_name">
+            android:name="com.seysame.view.activity.HomeActivity"
+            android:label="@string/app_name" >
+           
             
-            <intent-filter>
-    <action android:name="android.intent.action.SEARCH" />
-</intent-filter>
+             <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.seysame.view.activity.SearchResultActivity" />
 
-<meta-data
-    android:name="android.app.default_searchable"
-    android:value="com.seysame.view.activity.HomeActivity" />
-<meta-data
-    android:name="android.app.searchable"
-    android:resource="@xml/searchable" />
-            
-            
-            
-      </activity>      
-       
-        <activity android:name="com.facebook.LoginActivity"
-                  android:label="@string/app_name" />
+           
+        </activity>
+        <activity
+            android:name="com.facebook.LoginActivity"
+            android:label="@string/app_name" />
         
         
-       <service android:name="com.parse.PushService" />
+         <activity
+            android:name="com.seysame.view.activity.SearchResultActivity"
+            android:label="@string/app_name" 
+            android:launchMode="singleTop"
+            android:parentActivityName="com.seysame.view.activity.HomeActivity" >
+             <!-- Parent activity meta-data to support 4.0 and lower -->
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="com.seysame.view.activity.HomeActivity" />
+        
+         <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+        
+         <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.seysame.view.activity.SearchResultActivity" />
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        
+        
+        </activity>
+        
+        
+        
+
+        <service android:name="com.parse.PushService" />
 
         <receiver android:name="com.parse.ParseBroadcastReceiver" >
             <intent-filter>
@@ -91,13 +111,12 @@
 				  IMPORTANT: If you change the package name of this sample app,
 				  change "com.parse.tutorials.pushnotifications" in the lines
 				  below to match the new package name.
-
                 -->
                 <category android:name="com.seysame.parse" />
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.seysame.parse.receiver.NotificationReceiver"
+            android:name=".receiver.NotificationReceiver"
             android:exported="false" >
 
             <!-- android:name="com.parse.ParsePushBroadcastReceiver" -->
@@ -107,14 +126,16 @@
                 <action android:name="com.parse.push.intent.DELETE" />
                 <action android:name="com.parse.push.intent.OPEN" />
             </intent-filter>
-        </receiver>  
-         <!-- replace @drawable/push_icon with your push icon identifier -->
+        </receiver>
+        <!-- replace @drawable/push_icon with your push icon identifier -->
         <meta-data
             android:name="com.parse.push.notification_icon"
             android:resource="@drawable/ic_launcher" />
-        
-        <meta-data android:name="com.facebook.sdk.ApplicationId" 
-            android:value="@string/FACEBOOK_ID"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/FACEBOOK_ID" />
+
+       
     </application>
 
 </manifest>

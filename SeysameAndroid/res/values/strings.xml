@@ -16,7 +16,7 @@
     <string name="drawer_close">Close navigation drawer</string>
     <string name="action_search">Card Search</string>
     <string name="action_refresh">Refresh</string>
-    <string name="search_card">Card name</string>
+    <string name="search_card">Card text</string>
     <string name="search_level_rank">Level/Rank</string>
     <string name="search_attack">Attack</string>
     <string name="search_defense">Defense</string>
@@ -24,7 +24,10 @@
     <string name="search_icon">Icon</string>
     <string name="search_monster_type">Monster Type</string>
     <string name="search_race">Race</string>
-
+    <string name="search_result_view">View</string>
+    <string name="search_result_trunk">Add to trunk</string>
+	<string name="search_result_wanted">Add to wanted</string>
+    
     <string-array name="drawer_array">
         <item>Available Trades</item>
         <item>Card Search</item>
@@ -80,7 +83,6 @@
         <item>FIEND</item>
         <item>PHANTOMDRAGON</item>
     </string-array>
-    
     <string-array name="monster_type__array">
         <item>NORMAL</item>
         <item>EFFECT</item>
@@ -99,5 +101,8 @@
         <item>XYZ</item>
         <item>PENDULUM</item>
     </string-array>
+
+    
+
 
 </resources>
